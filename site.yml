@@ -1,8 +1,13 @@
 ---
-- hosts: all
+- hosts: pve
   gather_facts: yes
   become: true
   tasks:
+    - name: BAT | DEBIAN | Install deb from github
+      become: true
+      ansible.builtin.apt:
+        name: bat
+        state: latest
     - name: Set OS-specific task file path
       set_fact:
         os_task_file: "tasks/{{ ansible_facts['os_family'] | lower }}.yml"
