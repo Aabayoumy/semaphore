@@ -21,10 +21,3 @@
       ansible.builtin.debug:
         msg: "Warning: No task file found for {{ ansible_facts['os_family'] }} ({{ os_task_file }})"
       when: not os_file_check.stat.exists
-
-    - name: Move log file with timestamp and keep only last 10 logs
-      ansible.builtin.shell: |
-        mv ./ansible.log ./logs/ansible_$(date +%Y%m%d_%H%M%S).log
-        cd ./logs && ls -t ansible_*.log | tail -n +11 | xargs -r rm --
-      delegate_to: localhost
-      run_once: true
