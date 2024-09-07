@@ -1,5 +1,5 @@
 ---
-- hosts: home
+- hosts: all
   gather_facts: yes
   become: true
   tasks:
