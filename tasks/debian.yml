@@ -1,0 +1,31 @@
+- name: Check if file exists
+  stat:
+    path: "/etc/apt/apt.conf.d/01proxy"
+  register: result
+
+- name: Touch 01proxy
+  ansible.builtin.file:
+    path: /etc/apt/apt.conf.d/01proxy
+    state: touch
+  when: not result.stat.exists
+
+- name: apt-cacher-ng
+  ansible.builtin.lineinfile:
+    path: /etc/apt/apt.conf.d/01proxy
+    line: "{{ item }}"
+  loop:
+    - Acquire::HTTP::Proxy "http://10.0.0.110:3142";
+  when: not result.stat.exists
+
+- name: Debian | update cache
+  ansible.builtin.apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Debian | Update all packages
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    autoremove: true
+    autoclean: true
+    clean: true

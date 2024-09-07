@@ -1,0 +1,18 @@
+- name: Redhat | dnf conf
+  ansible.builtin.lineinfile:
+    path: /etc/dnf/dnf.conf
+    line: "{{ item }}"
+  loop:
+    - max_parallel_downloads=20
+    - fastestmirror=true
+    - deltarpm=true
+  run_once: true
+
+- name: Redhat | Upgrade all packages
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+
+- name: Redhat | Autoremove unneeded packages
+  ansible.builtin.dnf:
+    autoremove: yes

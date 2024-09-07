@@ -1,0 +1,26 @@
+- name: ArchLinux | Update package cache and upgrade all packages
+  community.general.pacman:
+    update_cache: yes
+    upgrade: yes
+
+- name: ArchLinux | Check if yay is installed
+  command: which yay
+  register: yay_check
+  ignore_errors: yes
+  changed_when: false
+
+- name: ArchLinux | Install yay if not present
+  kewlfft.aur.aur:
+    name: yay
+    use: makepkg
+    state: present
+  become: yes
+  become_user: ansible
+  when: yay_check.rc != 0
+
+- name: ArchLinux | Update AUR packages
+  kewlfft.aur.aur:
+    use: yay
+    upgrade: yes
+  become: yes
+  become_user: ansible
