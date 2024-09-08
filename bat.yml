@@ -5,3 +5,5 @@
     - name: install bat
       apt:
         name: bat
+        state: state: latest
+        update_cache: yes
