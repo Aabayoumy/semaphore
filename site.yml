@@ -5,13 +5,13 @@
   tasks:
     - name: "System | Run Tasks: {{ ansible_os_family }}"
       ansible.builtin.include_tasks: "tasks/debian.yml"
-      when: {{ ansible_os_family }} == 'Debian'    
+      when: ansible_facts['os_family'] == "Debian"    
     - name: "System | Run Tasks: {{ ansible_os_family }}"
       ansible.builtin.include_tasks: "tasks/redhat.yml"
-      when: {{ ansible_os_family }} == 'RedHat'
+      when: ansible_facts['os_family'] == "RedHat"
     - name: "System | Run Tasks: {{ ansible_os_family }}"
       ansible.builtin.include_tasks: "tasks/archlinux.yml"
-      when: {{ ansible_os_family }} == 'Archlinux'
+      when: ansible_facts['os_family'] == "Archlinux"
       
     - name: Get current timezone
       ansible.builtin.command: timedatectl show --property=Timezone --value
