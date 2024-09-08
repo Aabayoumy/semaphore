@@ -6,11 +6,11 @@
     - name: "System | Checking for Distribution Config: {{ ansible_os_family }}"
       ansible.builtin.stat:
         path: "tasks/{{ ansible_os_family }}.yml"
-      register: system_distribution_config
+      register: ansible_os_config
     
     - name: "System | Run Tasks: {{ ansible_os_family }}"
       ansible.builtin.include_tasks: "tasks/{{ ansible_os_family }}.yml"
-      when: system_distribution_config.stat.exists
+      when: ansible_os_config.stat.exists
       
     - name: Get current timezone
       ansible.builtin.command: timedatectl show --property=Timezone --value
