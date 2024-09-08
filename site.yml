@@ -3,6 +3,9 @@
   gather_facts: true
   become: true
   tasks:
+    - name: Set OS-specific task file path
+      set_fact:
+        os_task_file: "tasks/{{ ansible_facts['os_family'] | lower }}.yml"
     - name: Check if OS-specific task file exists
       stat:
         path: "{{ os_task_file }}"
@@ -12,8 +15,3 @@
     - name: Include OS-specific tasks
       ansible.builtin.include_tasks: "{{ os_task_file }}"
       when: os_file_check.stat.exists
-
-    - name: Display warning if OS-specific file not found
-      ansible.builtin.debug:
-        msg: "Warning: No task file found for {{ ansible_facts['os_family'] }} ({{ os_task_file }})"
-      when: not os_file_check.stat.exists
