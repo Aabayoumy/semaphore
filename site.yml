@@ -3,14 +3,15 @@
   gather_facts: true
   become: true
   tasks:
-    - name: "System | Checking for Distribution Config: {{ ansible_os_family }}"
-      ansible.builtin.stat:
-        path: "tasks/{{ ansible_os_family }}.yml"
-      register: ansible_os_config
-    
     - name: "System | Run Tasks: {{ ansible_os_family }}"
-      ansible.builtin.include_tasks: "tasks/{{ ansible_os_family }}.yml"
-      when: ansible_os_config.stat.exists
+      ansible.builtin.include_tasks: "tasks/debian.yml"
+      when: {{ ansible_os_family }} == 'Debian'    
+    - name: "System | Run Tasks: {{ ansible_os_family }}"
+      ansible.builtin.include_tasks: "tasks/redhat.yml"
+      when: {{ ansible_os_family }} == 'RedHat'
+    - name: "System | Run Tasks: {{ ansible_os_family }}"
+      ansible.builtin.include_tasks: "tasks/archlinux.yml"
+      when: {{ ansible_os_family }} == 'Archlinux'
       
     - name: Get current timezone
       ansible.builtin.command: timedatectl show --property=Timezone --value
