@@ -3,15 +3,6 @@
   gather_facts: true
   become: true
   tasks:
-    - name: Set OS-specific task file path
-      set_fact:
-        os_task_file: "tasks/{{ ansible_facts['os_family'] | lower }}.yml"
-    - name: Check if OS-specific task file exists
-      stat:
-        path: "{{ os_task_file }}"
-      register: os_file_check
-      delegate_to: localhost
-
-    - name: Include OS-specific tasks
-      ansible.builtin.include_tasks: "{{ os_task_file }}"
-      when: os_file_check.stat.exists
+    - name: Run Ubuntu Tasks
+      ansible.builtin.import_tasks: Debian.yml
+      when: ansible_os_family == 'Debian'
