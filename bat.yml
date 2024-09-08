@@ -1,0 +1,7 @@
+---
+- hosts: pve
+  become: true
+  tasks:
+    - name: install bat
+      ansible.builtin.package:
+        name: bat
