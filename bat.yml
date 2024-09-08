@@ -3,5 +3,5 @@
   become: true
   tasks:
     - name: install bat
-      ansible.builtin.package:
+      apt:
         name: bat
