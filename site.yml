@@ -3,6 +3,22 @@
   gather_facts: true
   become: true
   tasks:
-    - name: Run Ubuntu Tasks
-      ansible.builtin.import_tasks: tasks/debian.yml
-      when: ansible_os_family == 'Debian'
+    - name: "System | Checking for Distribution Config: {{ ansible_os_family }}"
+      ansible.builtin.stat:
+        path: "{{ role_path }}/tasks/{{ ansible_os_family }}.yml"
+      register: system_distribution_config
+    
+    - name: "System | Run Tasks: {{ ansible_os_family }}"
+      ansible.builtin.include_tasks: "{{ ansible_os_family }}.yml"
+      when: system_distribution_config.stat.exists
+    - name: Get current timezone
+      ansible.builtin.command: timedatectl show --property=Timezone --value
+      register: current_timezone
+      changed_when: false
+    
+    - name: Set timezone to Africa/Cairo
+      community.general.timezone:
+        name: Africa/Cairo
+      become: yes
+      become_method: sudo
+      when: current_timezone.stdout != 'Africa/Cairo'
