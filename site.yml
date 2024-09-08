@@ -1,5 +1,5 @@
 ---
-- hosts: pve
+- hosts: all
   gather_facts: true
   become: true
   tasks:
