@@ -2,6 +2,7 @@
 - hosts: all
   gather_facts: true
   become: true
+  ignore_unreachable: true
   tasks:
     - name: "System | Run Tasks: {{ ansible_os_family }}"
       ansible.builtin.include_tasks: "tasks/debian.yml"
